@@ -12,75 +12,54 @@ public class DomainTests
     public void CreateClub_WithEmptyName_ThrowsArgumentException()
     {
         // Arrange
-        var manager = new ClubManager();
+    var name = "";
 
-        // Act
-        var act = () => manager.CreateClub("", "mô tả", "p@gmail.com");
+    // Act
+    var act = () => Club.Create(name, "mô tả");
 
-        // Assert
-        Assert.Throws<ArgumentException>(act);
+    // Assert
+    Assert.Throws<ArgumentException>(act);
     }
 
     // TODO (Nhiệm vụ 4): bỏ Skip và viết thân test cho từng trường hợp dưới đây.
     // Cần ≥ 6 test AAA cho lớp Domain (Club, Event), trong đó có cả trường hợp lỗi.
 
-    [Fact(Skip = "TODO: viết test Club.Create với tên hợp lệ")]
-    public void Club_Create_WithValidName_ReturnsClub()
+    [Fact] public void Club_Create_WithValidName_ReturnsClub()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var club = Club.Create("Tech Club", "mô tả");
+        Assert.Equal("Tech Club", club.Name);
+        Assert.NotEqual(Guid.Empty, club.Id);
     }
 
-    [Fact(Skip = "TODO: viết test Club.Create với tên rỗng hoặc dài hơn 100 ký tự")]
-    public void Club_Create_WithInvalidName_ThrowsArgumentException()
+    [Fact] public void Club_Create_WithInvalidName_ThrowsArgumentException()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var tooLong = new string('a', Club.MaxNameLength + 1);
+        Assert.Throws<ArgumentException>(() => Club.Create(tooLong, "x"));
     }
 
-    [Fact(Skip = "TODO: viết test Club.HasRoom ở biên 49 và 50 thành viên")]
-    public void Club_HasRoom_AtMaxMembers_ReturnsFalse()
+    [Fact] public void Club_HasRoom_AtMaxMembers_ReturnsFalse()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var club = Club.Create("Tech Club", "x");
+        Assert.True(club.HasRoom(49));
+        Assert.False(club.HasRoom(50));      // biên
     }
 
-    [Fact(Skip = "TODO: viết test Event.Register thành viên mới")]
-    public void Event_Register_NewMember_ReturnsTrue()
+    [Fact] public void Event_Register_NewMember_ReturnsTrue()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var ev = new Event { Title = "Workshop" };
+        Assert.True(ev.Register(Guid.NewGuid()));
     }
 
-    [Fact(Skip = "TODO: viết test Event.Register cùng một thành viên hai lần")]
-    public void Event_Register_SameMemberTwice_ReturnsFalse()
+    [Fact] public void Event_Register_SameMemberTwice_ReturnsFalse()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var ev = new Event { Title = "Workshop" }; var id = Guid.NewGuid();
+        ev.Register(id);
+        Assert.False(ev.Register(id));
     }
 
-    [Fact(Skip = "TODO: viết test Event.CheckIn khi chưa đăng ký")]
-    public void Event_CheckIn_UnregisteredMember_ThrowsInvalidOperationException()
+    [Fact] public void Event_CheckIn_UnregisteredMember_ThrowsInvalidOperationException()
     {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var ev = new Event { Title = "Workshop" };
+        Assert.Throws<InvalidOperationException>(() => ev.CheckIn(Guid.NewGuid()));
     }
 }

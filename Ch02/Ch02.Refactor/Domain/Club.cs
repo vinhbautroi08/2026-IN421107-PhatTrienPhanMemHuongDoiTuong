@@ -23,8 +23,6 @@ public class Club
     }
 
     // TODO (Nhiệm vụ 4): trả về true khi số thành viên hiện tại còn nhỏ hơn MaxMembers.
-    public bool HasRoom(int currentMemberCount) 
-    {
-        throw new NotImplementedException();
-    }
+    public bool HasRoom(int currentMemberCount) => currentMemberCount < MaxMembers;
+    
 }
